@@ -1,4 +1,11 @@
+export class ProductDto {
+  @IsNotEmpty()
+  @ApiProperty({ type: Number })
+  id: number;
 
-export class ProductDto {}
+  @IsNotEmpty()
+  @ApiProperty({ type: String })
+  mobile: string;
+}
 export class CreateProductDto {}
 export class UpdateProductDto {}
