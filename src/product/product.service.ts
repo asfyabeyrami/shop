@@ -1,25 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { CreateProductDto, UpdateProductDto } from '../DTO/product.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { Product } from '../models/product.model';
+import { CreateProductDto } from '../DTO/product.dto';
 
 @Injectable()
-export class ProductService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+export class ProductsService {
+  constructor(
+    @InjectModel(Product)
+    private productModel: typeof Product,
+  ) {}
+
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    // تبدیل DTO به یک آبجکت ساده
+    const productData = {
+      name: createProductDto.name,
+      description: createProductDto.description,
+      price: createProductDto.price,
+    };
+
+    return this.productModel.create({ ...productData });
   }
 
-  findAll() {
-    return `This action returns all product`;
+  findAll(): Promise<Product[]> {
+    return this.productModel.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
-  }
-
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async findOne(id: number): Promise<Product> {
+    const product = await this.productModel.findByPk(id);
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    return product;
   }
 }

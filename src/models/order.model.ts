@@ -5,17 +5,19 @@ import {
   BelongsTo,
   ForeignKey,
   HasMany,
+  DataType,
 } from 'sequelize-typescript';
 import Sequelize from 'sequelize';
 // relasions
-import { Order } from './order.model';
+import { User } from '../models/user.model';
+import { Product } from '../models/product.model';
 
 @Table({
-  tableName: 'users',
+  tableName: 'orders',
   paranoid: true,
   deletedAt: 'deletedAt',
 })
-export class User extends Model {
+export class Order extends Model {
   @Column({
     primaryKey: true,
     autoIncrement: true,
@@ -24,44 +26,39 @@ export class User extends Model {
   })
   id: number;
 
+  @ForeignKey(() => User)
   @Column({
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false,
-    unique: true,
+    references: { model: 'user', key: 'id' },
   })
-  username: string;
+  userId: string;
+
+  @ForeignKey(() => Product)
+  @Column({
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: { model: 'product', key: 'id' },
+  })
+  productId: string;
 
   @Column({
+    type: Sequelize.INTEGER,
     allowNull: false,
-    type: Sequelize.STRING,
   })
-  password: string;
+  quantity: number;
 
   @Column({
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     allowNull: false,
-    unique: true,
   })
-  mobile: string;
+  totalPrice: number;
 
   @Column({
-    allowNull: false,
-    type: Sequelize.STRING,
+    type: DataType.ENUM('pending', 'completed', 'cancelled'),
+    defaultValue: 'pending',
   })
-  name: string;
-
-  @Column({
-    allowNull: false,
-    type: Sequelize.STRING,
-  })
-  lastName: string;
-
-  @Column({
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true,
-  })
-  email: string;
+  status: string;
 
   @Column({
     defaultValue: new Date(),
@@ -83,6 +80,9 @@ export class User extends Model {
   })
   deletedAt: Date;
 
-  @HasMany(() => Order, { foreignKey: 'userId' })
-  order: Order[];
+  @BelongsTo(() => User, { foreignKey: 'userId' })
+  user: User;
+
+  @BelongsTo(() => Product, { foreignKey: 'productId' })
+  product: Product;
 }
