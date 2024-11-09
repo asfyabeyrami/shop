@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { ProductsService } from './product.service';
-import { ProductsController } from './product.controller';
+import { ProductService } from './product.service';
+import { ProductController } from './product.controller';
 import { Product } from '../models/product.model';
+import { ProductDataAccess } from 'src/dataAccess/product.dataAccess';
 
 @Module({
   imports: [SequelizeModule.forFeature([Product])],
-  controllers: [ProductsController],
-  providers: [ProductsService],
-  exports: [ProductsService],
+  controllers: [ProductController],
+  providers: [ProductService,ProductDataAccess],
+  exports: [ProductService],
 })
 export class ProductsModule {}

@@ -9,7 +9,7 @@ import {
 } from 'sequelize-typescript';
 import Sequelize from 'sequelize';
 // relasions
-import { Order } from './order.model';
+import { Category } from './category.model';
 
 @Table({
   tableName: 'products',
@@ -21,9 +21,17 @@ export class Product extends Model {
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
-    type: Sequelize.BIGINT.UNSIGNED,
+    type: Sequelize.INTEGER,
   })
   id: number;
+
+  @ForeignKey(() => Category)
+  @Column({
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: { model: 'category', key: 'id' },
+  })
+  categoryId: number;
 
   @Column({
     type: Sequelize.STRING,
@@ -43,6 +51,12 @@ export class Product extends Model {
   })
   price: number;
 
-  @HasMany(() => Order, { foreignKey: 'userId' })
-  order: Order[];
+  @Column({
+    type: Sequelize.INTEGER,
+    allowNull: true,
+  })
+  stock: number;
+
+  @BelongsTo(() => Category, { foreignKey: 'categoryId' })
+  Category: Category;
 }

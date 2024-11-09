@@ -1,35 +1,55 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
 import { Product } from '../models/product.model';
-import { CreateProductDto } from '../DTO/product.dto';
+import { CreateProductDto, UpdateProductDto } from '../DTO/product.dto';
+import { ProductDataAccess } from 'src/dataAccess/product.dataAccess';
+import { Transaction } from 'sequelize';
 
 @Injectable()
-export class ProductsService {
+export class ProductService {
   constructor(
-    @InjectModel(Product)
-    private productModel: typeof Product,
+    private readonly productDataAccess: ProductDataAccess,
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
-    // تبدیل DTO به یک آبجکت ساده
-    const productData = {
-      name: createProductDto.name,
-      description: createProductDto.description,
-      price: createProductDto.price,
-    };
-
-    return this.productModel.create({ ...productData });
+    return this.productDataAccess.create(createProductDto);
   }
 
-  findAll(): Promise<Product[]> {
-    return this.productModel.findAll();
+  async findAll(): Promise<Product[]> {
+    return this.productDataAccess.findAll();
   }
 
   async findOne(id: number): Promise<Product> {
-    const product = await this.productModel.findByPk(id);
+    const product = await this.productDataAccess.findOne(id);
     if (!product) {
-      throw new NotFoundException('Product not found');
+      throw new NotFoundException(`Product #${id} not found`);
     }
     return product;
+  }
+
+  async findByCategory(categoryId: number): Promise<Product[]> {
+    return this.productDataAccess.findByCategory(categoryId);
+  }
+
+  async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {
+    const [count, [updatedProduct]] = await this.productDataAccess.update(id, updateProductDto);
+    if (count === 0) {
+      throw new NotFoundException(`Product #${id} not found`);
+    }
+    return updatedProduct;
+  }
+
+  async updateStock(id: number, quantity: number, transaction?: Transaction): Promise<Product> {
+    const [count, [updatedProduct]] = await this.productDataAccess.updateStock(id, quantity, transaction);
+    if (count === 0) {
+      throw new NotFoundException(`Product #${id} not found`);
+    }
+    return updatedProduct;
+  }
+
+  async remove(id: number): Promise<void> {
+    const count = await this.productDataAccess.remove(id);
+    if (count === 0) {
+      throw new NotFoundException(`Product #${id} not found`);
+    }
   }
 }

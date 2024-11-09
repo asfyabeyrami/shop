@@ -1,14 +1,7 @@
-import {
-  Column,
-  Table,
-  Model,
-  BelongsTo,
-  ForeignKey,
-  HasMany,
-} from 'sequelize-typescript';
+import { Column, Table, Model, HasMany } from 'sequelize-typescript';
 import Sequelize from 'sequelize';
 // relasions
-import { Order } from './order.model';
+// import { Cart } from './cart.model';
 
 @Table({
   tableName: 'users',
@@ -20,29 +13,9 @@ export class User extends Model {
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
-    type: Sequelize.BIGINT.UNSIGNED,
+    type: Sequelize.INTEGER,
   })
   id: number;
-
-  @Column({
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true,
-  })
-  username: string;
-
-  @Column({
-    allowNull: false,
-    type: Sequelize.STRING,
-  })
-  password: string;
-
-  @Column({
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true,
-  })
-  mobile: string;
 
   @Column({
     allowNull: false,
@@ -61,28 +34,28 @@ export class User extends Model {
     allowNull: false,
     unique: true,
   })
+  userName: string;
+
+  @Column({
+    allowNull: false,
+    type: Sequelize.STRING,
+  })
+  password: string;
+
+  @Column({
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  })
+  mobile: string;
+
+  @Column({
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  })
   email: string;
 
-  @Column({
-    defaultValue: new Date(),
-    allowNull: false,
-    type: Sequelize.DATE,
-  })
-  createdAt: Date;
-
-  @Column({
-    defaultValue: new Date(),
-    allowNull: false,
-    type: Sequelize.DATE,
-  })
-  updatedAt: Date;
-
-  @Column({
-    allowNull: true,
-    type: Sequelize.DATE,
-  })
-  deletedAt: Date;
-
-  @HasMany(() => Order, { foreignKey: 'userId' })
-  order: Order[];
+//   @HasMany(() => Cart, { foreignKey: 'userId' })
+//   Cart: Cart[];
 }

@@ -3,7 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './product/product.module';
-import { OrdersModule } from './order/order.module';
+import { AuthModule } from './auth/auth.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { OrdersModule } from './order/order.module';
         username: configService.get('DB_USERNAME', 'postgres'),
         password: configService.get('DB_PASSWORD', 'password'),
         database: configService.get('DB_DATABASE', 'nestjs'),
+        // models: [__dirname + '/**/*.model{.ts,.js}'], // find all models auto
         autoLoadModels: true,
         synchronize: true,
       }),
@@ -26,7 +28,8 @@ import { OrdersModule } from './order/order.module';
     }),
     UsersModule,
     ProductsModule,
-    OrdersModule,
+    AuthModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}
