@@ -8,11 +8,11 @@ import {
   BelongsToMany,
 } from 'sequelize-typescript';
 import Sequelize from 'sequelize';
-// relasions
-import { Category } from './category.model';
+// Relations
+import { User } from './user.model';
 
 @Table({
-  tableName: 'products',
+  tableName: 'product',
   paranoid: true,
   deletedAt: 'deletedAt',
 })
@@ -20,28 +20,27 @@ export class Product extends Model {
   @Column({
     primaryKey: true,
     autoIncrement: true,
-    allowNull: false,
     type: Sequelize.INTEGER,
   })
   id: number;
 
-  @ForeignKey(() => Category)
+  @ForeignKey(() => User)
   @Column({
     type: Sequelize.INTEGER,
     allowNull: false,
-    references: { model: 'category', key: 'id' },
+    references: { model: 'user', key: 'id' },
   })
-  categoryId: number;
+  userId: number;
 
   @Column({
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
   })
-  name: string;
+  title: string;
 
   @Column({
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
   })
   description: string;
 
@@ -51,12 +50,6 @@ export class Product extends Model {
   })
   price: number;
 
-  @Column({
-    type: Sequelize.INTEGER,
-    allowNull: true,
-  })
-  stock: number;
-
-  @BelongsTo(() => Category, { foreignKey: 'categoryId' })
-  Category: Category;
+  @BelongsTo(() => User, { foreignKey: 'userId' })
+  User: User;
 }

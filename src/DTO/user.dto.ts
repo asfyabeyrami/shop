@@ -1,8 +1,5 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsEmail,
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsEmail } from 'class-validator';
 export class UserDto {
   @IsNotEmpty()
   @ApiProperty({ type: Number })
@@ -44,7 +41,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @ApiProperty({ type: String })
-  username: string;
+  userName: string;
 
   @IsNotEmpty()
   @ApiProperty({ type: String })
@@ -70,7 +67,7 @@ export class UpdateUserDto {
 
   @IsNotEmpty()
   @ApiProperty({ type: String })
-  username: string;
+  userName: string;
 
   @IsNotEmpty()
   @ApiProperty({ type: String })

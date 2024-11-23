@@ -1,12 +1,14 @@
 import { Column, Table, Model, HasMany } from 'sequelize-typescript';
 import Sequelize from 'sequelize';
-// relasions
-// import { Cart } from './cart.model';
+
+// Relations
+import { Product } from './product.model';
 
 @Table({
-  tableName: 'users',
+  tableName: 'user',
   paranoid: true,
   deletedAt: 'deletedAt',
+  timestamps: true,
 })
 export class User extends Model {
   @Column({
@@ -14,6 +16,7 @@ export class User extends Model {
     autoIncrement: true,
     allowNull: false,
     type: Sequelize.INTEGER,
+    field: 'id',
   })
   id: number;
 
@@ -56,6 +59,21 @@ export class User extends Model {
   })
   email: string;
 
-//   @HasMany(() => Cart, { foreignKey: 'userId' })
-//   Cart: Cart[];
+  @Column({
+    type: Sequelize.DATE,
+  })
+  createdAt: Date;
+
+  @Column({
+    type: Sequelize.DATE,
+  })
+  updatedAt: Date;
+
+  @Column({
+    type: Sequelize.DATE,
+  })
+  deletedAt: Date;
+
+  @HasMany(() => Product, { foreignKey: 'userId' })
+  Product: Product[];
 }

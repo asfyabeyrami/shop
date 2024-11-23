@@ -6,39 +6,15 @@ import {
   IsEnum,
   IsOptional,
 } from 'class-validator';
-export class ProductDto {
-  @IsNotEmpty()
-  @ApiProperty({ type: Number })
-  id: number;
 
-  @IsNotEmpty()
-  @ApiProperty({ type: Number })
-  categoryId: number;
-
-  @IsNotEmpty()
-  @ApiProperty({ type: String })
-  name: string;
-
-  @IsNotEmpty()
-  @ApiProperty({ type: String })
-  description: string;
-
-  @IsNotEmpty()
-  @ApiProperty({ type: Number })
-  price: number;
-
-  @IsNotEmpty()
-  @ApiProperty({ type: Number })
-  stock: number;
-}
 export class CreateProductDto {
   @IsNotEmpty()
   @ApiProperty({ type: String })
-  name: string;
+  title: string;
 
   @IsNotEmpty()
   @ApiProperty({ type: Number })
-  categoryId: number;
+  userId: number;
 
   @IsNotEmpty()
   @ApiProperty({ type: String })
@@ -47,15 +23,15 @@ export class CreateProductDto {
   @IsNotEmpty()
   @ApiProperty({ type: Number })
   price: number;
-
-  @IsNotEmpty()
-  @ApiProperty({ type: Number })
-  stock: number;
 }
 export class UpdateProductDto {
   @IsNotEmpty()
   @ApiProperty({ type: String })
-  name: string;
+  title: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ type: Number })
+  userId: number;
 
   @IsNotEmpty()
   @ApiProperty({ type: String })
@@ -64,8 +40,4 @@ export class UpdateProductDto {
   @IsNotEmpty()
   @ApiProperty({ type: Number })
   price: number;
-
-  @IsNotEmpty()
-  @ApiProperty({ type: Number })
-  stock: number;
 }
